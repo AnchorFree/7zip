@@ -813,7 +813,7 @@ int Main2(
 }
 
 int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const TCHAR* chInOutputFolderName,
-    const TCHAR* chPassword, const TCHAR* chFileFilter, ScanFileState* pScanFileState)
+    const TCHAR* chPassword, const TCHAR* chFileFilter, ScanFileState* pScanFileState, ArchiveOptions pArchiveOption)
 {
   #if defined(MY_CPU_SIZEOF_POINTER)
     { unsigned k = sizeof(void *); if (k != MY_CPU_SIZEOF_POINTER) throw "incorrect MY_CPU_PTR_SIZE"; }
@@ -1377,7 +1377,7 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
           ArchivePathsFullSorted,
           options.Censor.Pairs.Front().Head,
           eo, ecs, ecs, ecs,
-          hashCalc, errorMessage, stat, pScanFileState);
+          hashCalc, errorMessage, stat, pScanFileState, pArchiveOption);
       
       ecs->ClosePercents();
 
@@ -1639,10 +1639,10 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
 
 bool WINAPI __stdcall UnMax7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
     const TCHAR* chOutputFolderName, const TCHAR* chPassword, const TCHAR* chFileFilter,
-    ScanFileState* pScanFileState)
+    ScanFileState* pScanFileState, ArchiveOptions pArchiveOption)
 {
   int iRet = ExtractArchiveFile(chAction, chArchiveName, chOutputFolderName,
-      chPassword, chFileFilter, pScanFileState);
+      chPassword, chFileFilter, pScanFileState, pArchiveOption);
   return iRet == 0;
 }
 
@@ -1659,6 +1659,7 @@ Description		: It is a exported function which calls "ExtractFile" for extractio
 bool WINAPI __stdcall Max7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
     const TCHAR* chInputFileFolderName, const TCHAR* chPassword, const TCHAR* chFileFilter)
 {
-  int iRet = ExtractArchiveFile(chAction, chArchiveName, chInputFileFolderName, chPassword, chFileFilter, NULL);
+    ArchiveOptions pArchiveOption = { 0 };
+  int iRet = ExtractArchiveFile(chAction, chArchiveName, chInputFileFolderName, chPassword, chFileFilter, NULL, pArchiveOption);
   return iRet == 0;
 }
