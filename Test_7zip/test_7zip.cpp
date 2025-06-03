@@ -76,8 +76,12 @@ TEST_CASE("Zipping/Unzipping the file", "[7zip]")
         std::wstring unpackDirName = L"-o" + kTestDir.wstring();
         ScanFileState fileState = ScanFileState::E_ScanFileState_None;
         ArchiveOptions ArchiveConfig = { 0 };
+        ArchiveConfig.ArchiveMaxCount = 12;
+        ArchiveConfig.ArchiveMaxRatio = 250;
+        ArchiveConfig.ArchiveMaxSize = 0;
+        ArchiveConfig.ArchiveTotalMaxSize = 0;
         bool result = g_UnpackFunc(L"x", kPackedFile.wstring().data(),
-            unpackDirName.data(), kPassword.data(), nullptr, &fileState, ArchiveConfig);
+            unpackDirName.data(), kPassword.data(), nullptr, &fileState,ArchiveConfig);
         REQUIRE(result);
         REQUIRE(fs::exists(kUnpackedFile));
         std::ifstream unpackedFile(kUnpackedFile);
