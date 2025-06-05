@@ -16,7 +16,7 @@ jobs:
       DOWNLOAD_ARTIFACTS_DIR: ${{ github.workspace }}\build\downloaded-artifacts
       UPLOAD_ARTIFACTS_DIR: ${{ github.workspace }}\build\upload-artifacts
       ARTIFACTS_NAME: 7zip-x64-Release
-      GDRIVE_ARTIFACTS_RELEASES_DIR: ${{ secrets.ARTIFACTS_STORAGE_ROOT_PATH }}/7z/releases
+      GDRIVE_ARTIFACTS_RELEASES_DIR: ${{ secrets.ARTIFACTS_SDK_STORAGE_ROOT_PATH }}/7z/releases
 
     steps:
     - uses: actions/checkout@v4
