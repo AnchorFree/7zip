@@ -6,6 +6,13 @@ enum class ScanFileState
     E_ScanFileState_Abort						    //File scan state: scan abort by service
 };
 
+enum ExtractionStatus
+{
+    SkipDueToArchiveMaxSize = 100,
+    SkipDueToMaxRatio = 200,
+    SkipDueToMaxCount = 300
+};
+
 struct ArchiveOptions
 {
 	uint64_t ArchiveMaxSize;

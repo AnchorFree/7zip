@@ -46,7 +46,8 @@ static HRESULT DecompressArchive(
     UString &errorMessage,
     UInt64& stdInProcessed,
     ScanFileState* pScanFileState,
-    ArchiveOptions pArchiveOption)
+    ArchiveOptions pArchiveOption,
+    int * iNewRetStatus)
 {
   const CArc &arc = arcLink.Arcs.Back();
   stdInProcessed = 0;
@@ -107,6 +108,8 @@ static HRESULT DecompressArchive(
         {
             fileCountWithinArchive++;
 
+            OutputDebugString(L"ExtractionStatus::SkipDueToMaxCount");
+
             // Get uncompressed size
             NCOM::CPropVariant sizeProp;
             if (SUCCEEDED(archive->GetProperty(i, kpidSize, &sizeProp)) && sizeProp.vt == VT_UI8) 
@@ -127,12 +130,14 @@ static HRESULT DecompressArchive(
         double compressionRatio = (totalCompressedSize * 100.0) / totalUncompressedSize;
         if (compressionRatio > pArchiveOption.ArchiveMaxRatio)
         {
+            *iNewRetStatus = ExtractionStatus::SkipDueToMaxRatio;
             return S_OK;
         }
     }
     
     if (pArchiveOption.ArchiveMaxCount != 0 && fileCountWithinArchive > pArchiveOption.ArchiveMaxCount)
     {
+        *iNewRetStatus = ExtractionStatus::SkipDueToMaxCount;
         return S_OK;
     }
     
@@ -143,16 +148,19 @@ static HRESULT DecompressArchive(
     UInt64 totalFileSize = 0;
     for (UInt32 i = 0; i < numItems; i++)
     {
-       if (pArchiveOption.ArchiveTotalMaxSize != 0 && fileCountWithinArchive > 0 && totalFileSize > pArchiveOption.ArchiveTotalMaxSize)
-       {
-           break;
-       }
        NCOM::CPropVariant sizeProp;
        HRESULT res = archive->GetProperty(i, kpidSize, &sizeProp);
        if (SUCCEEDED(res) && sizeProp.vt == VT_UI8) 
        {
             UInt64 fileSize = sizeProp.uhVal.QuadPart;
             totalFileSize = totalFileSize + fileSize;
+
+            if (pArchiveOption.ArchiveTotalMaxSize != 0 && fileCountWithinArchive > 0 && totalFileSize > pArchiveOption.ArchiveTotalMaxSize)
+            {
+                *iNewRetStatus = ExtractionStatus::SkipDueToArchiveMaxSize;
+                break;
+            }
+
             if (pArchiveOption.ArchiveMaxSize != 0 && fileSize > pArchiveOption.ArchiveMaxSize)
             {
                 continue;
@@ -356,7 +364,8 @@ HRESULT Extract(
     UString &errorMessage,
     CDecompressStat &st,
     ScanFileState* pScanFileState,
-    ArchiveOptions pArchiveOption)
+    ArchiveOptions pArchiveOption,
+    int *iNewRetStatus)
 {
   st.Clear();
   UInt64 totalPackSize = 0;
@@ -580,7 +589,7 @@ HRESULT Extract(
         options,
         calcCrc,
         extractCallback, faeCallback, ecs,
-        errorMessage, packProcessed, pScanFileState, pArchiveOption))
+        errorMessage, packProcessed, pScanFileState, pArchiveOption, iNewRetStatus))
 
     if (!options.StdInMode)
       packProcessed = fi.Size + arcLink.VolumesSize;
