@@ -10,7 +10,7 @@
 
 namespace fs = std::filesystem;
 
-using UnpackFunc = bool (*)(const TCHAR* chAction, const TCHAR* chArchiveName, const TCHAR* chOutputFolderName,
+using UnpackFunc = int (*)(const TCHAR* chAction, const TCHAR* chArchiveName, const TCHAR* chOutputFolderName,
     const TCHAR* chPassword, const TCHAR* chFileFilter, ScanFileState* pScanFileState, ArchiveOptions pArchiveOption);
 using PackFunc = bool (*)(const TCHAR* chAction, const TCHAR* chArchiveName, const TCHAR* chInputFileFolderName,
     const TCHAR* chPassword, const TCHAR* chFileFilter);
@@ -80,7 +80,7 @@ TEST_CASE("Zipping/Unzipping the file", "[7zip]")
         ArchiveConfig.ArchiveMaxRatio = 250;
         ArchiveConfig.ArchiveMaxSize = 0;
         ArchiveConfig.ArchiveTotalMaxSize = 0;
-        bool result = g_UnpackFunc(L"x", kPackedFile.wstring().data(),
+        int result = g_UnpackFunc(L"x", kPackedFile.wstring().data(),
             unpackDirName.data(), kPassword.data(), nullptr, &fileState,ArchiveConfig);
         REQUIRE(result);
         REQUIRE(fs::exists(kUnpackedFile));

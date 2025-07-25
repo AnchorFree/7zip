@@ -1043,7 +1043,7 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
   #endif
 
   int retCode = NExitCode::kSuccess;
-  int iNewRetStatus = 0;
+  int iNewRetStatus = 1;
   HRESULT hresultMain = S_OK;
 
   // bool showStat = options.ShowTime;
