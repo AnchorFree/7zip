@@ -1655,10 +1655,9 @@ Purpose			: Exported function to call "ExtractFile" for extraction purpose
 Author			: Sandip Sanap
 Description		: It is a exported function which calls "ExtractFile" for extraction purpose
 --------------------------------------------------------------------------------------*/
-bool WINAPI __stdcall Max7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
+int WINAPI __stdcall Max7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
     const TCHAR* chInputFileFolderName, const TCHAR* chPassword, const TCHAR* chFileFilter)
 {
-    ArchiveOptions pArchiveOption = { 0 };
-  int iRet = ExtractArchiveFile(chAction, chArchiveName, chInputFileFolderName, chPassword, chFileFilter, NULL, pArchiveOption);
-  return iRet == 0;
+  ArchiveOptions pArchiveOption = { 0 };
+  return  ExtractArchiveFile(chAction, chArchiveName, chInputFileFolderName, chPassword, chFileFilter, NULL, pArchiveOption);
 }
