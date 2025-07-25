@@ -813,7 +813,7 @@ int Main2(
 }
 
 int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const TCHAR* chInOutputFolderName,
-    const TCHAR* chPassword, const TCHAR* chFileFilter, ScanFileState* pScanFileState)
+    const TCHAR* chPassword, const TCHAR* chFileFilter, ScanFileState* pScanFileState, ArchiveOptions pArchiveOption)
 {
   #if defined(MY_CPU_SIZEOF_POINTER)
     { unsigned k = sizeof(void *); if (k != MY_CPU_SIZEOF_POINTER) throw "incorrect MY_CPU_PTR_SIZE"; }
@@ -1043,6 +1043,7 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
   #endif
 
   int retCode = NExitCode::kSuccess;
+  int iNewRetStatus = 1;
   HRESULT hresultMain = S_OK;
 
   // bool showStat = options.ShowTime;
@@ -1377,7 +1378,7 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
           ArchivePathsFullSorted,
           options.Censor.Pairs.Front().Head,
           eo, ecs, ecs, ecs,
-          hashCalc, errorMessage, stat, pScanFileState);
+          hashCalc, errorMessage, stat, pScanFileState, pArchiveOption, &iNewRetStatus);
       
       ecs->ClosePercents();
 
@@ -1620,7 +1621,7 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
 
   ThrowException_if_Error(hresultMain);
 
-  return retCode;
+  return iNewRetStatus;
 }
 
 /*-------------------------------------------------------------------------------------
@@ -1637,13 +1638,11 @@ int ExtractArchiveFile(const TCHAR* chAction, const TCHAR* chArchiveName, const 
     Description		: It is a exported function which calls "ExtractFile" for extraction purpose
 --------------------------------------------------------------------------------------*/
 
-bool WINAPI __stdcall UnMax7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
+int WINAPI __stdcall UnMax7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
     const TCHAR* chOutputFolderName, const TCHAR* chPassword, const TCHAR* chFileFilter,
-    ScanFileState* pScanFileState)
+    ScanFileState* pScanFileState, ArchiveOptions pArchiveOption)
 {
-  int iRet = ExtractArchiveFile(chAction, chArchiveName, chOutputFolderName,
-      chPassword, chFileFilter, pScanFileState);
-  return iRet == 0;
+  return ExtractArchiveFile(chAction, chArchiveName, chOutputFolderName, chPassword, chFileFilter, pScanFileState, pArchiveOption);
 }
 
 /*-------------------------------------------------------------------------------------
@@ -1656,9 +1655,9 @@ Purpose			: Exported function to call "ExtractFile" for extraction purpose
 Author			: Sandip Sanap
 Description		: It is a exported function which calls "ExtractFile" for extraction purpose
 --------------------------------------------------------------------------------------*/
-bool WINAPI __stdcall Max7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
+int WINAPI __stdcall Max7zArchive(const TCHAR* chAction, const TCHAR* chArchiveName,
     const TCHAR* chInputFileFolderName, const TCHAR* chPassword, const TCHAR* chFileFilter)
 {
-  int iRet = ExtractArchiveFile(chAction, chArchiveName, chInputFileFolderName, chPassword, chFileFilter, NULL);
-  return iRet == 0;
+  ArchiveOptions pArchiveOption = { 0 };
+  return  ExtractArchiveFile(chAction, chArchiveName, chInputFileFolderName, chPassword, chFileFilter, NULL, pArchiveOption);
 }
