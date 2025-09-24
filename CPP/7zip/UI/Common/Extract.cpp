@@ -108,8 +108,6 @@ static HRESULT DecompressArchive(
         {
             fileCountWithinArchive++;
 
-            OutputDebugString(L"ExtractionStatus::SkipDueToMaxCount");
-
             // Get uncompressed size
             NCOM::CPropVariant sizeProp;
             if (SUCCEEDED(archive->GetProperty(i, kpidSize, &sizeProp)) && sizeProp.vt == VT_UI8) 
@@ -176,11 +174,12 @@ static HRESULT DecompressArchive(
       int efg = result.Len();
       int iExtractLen = (arc.filePath.Len() + efg + 1); // inital path + "\" + item path
 
+      /*
       if (iExtractLen >= MAX_PATH)
       {
         continue;
       }
-
+      */
       if (elimIsPossible
           || !allFilesAreAllowed
           || options.ExcludeDirItems
@@ -401,11 +400,13 @@ HRESULT Extract(
         return errorCode;
       }
     }
+    /*
     if (arrcPath.Len() >= MAX_PATH) // new add so that it can skip files whose path length is reater or equal to 256
     {
       skipArcs[i] = true;
       continue;
     }
+    */
     arcSizes.Add(fi.Size);
     totalPackSize += fi.Size;
     skipArcs[i] = false;
