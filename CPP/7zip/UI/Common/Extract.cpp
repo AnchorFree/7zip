@@ -108,8 +108,6 @@ static HRESULT DecompressArchive(
         {
             fileCountWithinArchive++;
 
-            OutputDebugString(L"ExtractionStatus::SkipDueToMaxCount");
-
             // Get uncompressed size
             NCOM::CPropVariant sizeProp;
             if (SUCCEEDED(archive->GetProperty(i, kpidSize, &sizeProp)) && sizeProp.vt == VT_UI8) 
