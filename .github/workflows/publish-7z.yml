@@ -19,14 +19,14 @@ jobs:
       GDRIVE_ARTIFACTS_RELEASES_DIR: ${{ secrets.ARTIFACTS_STORAGE_ROOT_PATH }}/7z/releases
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
-    - uses: AnimMouse/setup-rclone@v1
+    - uses: AnimMouse/setup-rclone@26ef2133e09fd383329a1d4c1fbe6a71db1976c9 # v1.12.0
       with:
         rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
     - name: Download artifacts 7zip-x64-Release
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
       with:
         name: ${{ env.ARTIFACTS_NAME }}
         path: ${{ env.DOWNLOAD_ARTIFACTS_DIR }}
