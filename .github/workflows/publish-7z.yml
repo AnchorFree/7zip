@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
-    - uses: AnimMouse/setup-rclone@26ef2133e09fd383329a1d4c1fbe6a71db1976c9 # v1.12.0
+    - uses: AnchorFree/setup-rclone@22265f6f0d55cda70cba829a3047a24d4e81f797 # v1.0.0
       with:
         rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
