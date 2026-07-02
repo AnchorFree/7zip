@@ -19,7 +19,7 @@ jobs:
       GDRIVE_ARTIFACTS_RELEASES_DIR: ${{ secrets.ARTIFACTS_STORAGE_ROOT_PATH }}/7z/releases
 
     steps:
-    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
     - uses: AnchorFree/setup-rclone@22265f6f0d55cda70cba829a3047a24d4e81f797 # v1.0.0
       with:
