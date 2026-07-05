@@ -105,6 +105,8 @@ HRESULT Extract(
     #endif
     UString &errorMessage,
     CDecompressStat &st,
-    ScanFileState* pScanFileState);
+    ScanFileState* pScanFileState,
+    ArchiveOptions pArchiveOption,
+    int *iNewRetStatus);
 
 #endif
